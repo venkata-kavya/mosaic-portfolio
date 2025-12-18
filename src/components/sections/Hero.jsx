@@ -5,20 +5,20 @@ import Scene from "../3d/Scene";
 import MagneticButton from "../ui/MagneticButton";
 
 const Hero = ({ onStart }) => {
-  // <--- Receive Prop
   return (
     <section className="relative h-screen w-full overflow-hidden flex items-center justify-center">
       <div className="absolute inset-0 z-10">
         <Canvas
-          gl={{ antialias: false }}
+          gl={{ antialias: false, powerPreference: "high-performance" }}
           camera={{ position: [0, 0, 5], fov: 45 }}
+          dpr={[1, 1.5]} // <--- OPTIMIZATION 1: Cap Pixel Ratio at 1.5x
+          performance={{ min: 0.1 }} // <--- OPTIMIZATION 2: Allow degradation to 10% quality if FPS tanks
         >
           <Scene />
         </Canvas>
       </div>
 
       <div className="relative z-20 flex flex-col items-center justify-center pointer-events-none w-full px-4">
-        {/* ... Headings ... */}
         <motion.h1
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -52,12 +52,10 @@ const Hero = ({ onStart }) => {
           transition={{ delay: 1.2 }}
           className="mt-12 pointer-events-auto"
         >
-          {/* PASS onStart HERE */}
           <MagneticButton onClick={onStart}>Start Project</MagneticButton>
         </motion.div>
       </div>
 
-      {/* Scroll Line */}
       <motion.div
         className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30"
         animate={{ y: [0, 10, 0] }}
